@@ -16,9 +16,6 @@ type PhotoGrid() =
     [<Inject>]
     member val IJSRuntime: IJSRuntime = null with get, set
 
-    override this.OnAfterRenderAsync firstRender =
-        task { do! this.IJSRuntime.InvokeVoidAsync "photoUtils.applyPhotoMasonry" }
-
     override this.View model dispatch =
         AlbumTemplates
             .AlbumDetails()
