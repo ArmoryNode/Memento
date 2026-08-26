@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Constants.fs" />
+    <Compile Include="Types\PhotoInfo.fs" />
+    <Compile Include="Types\AlbumListItem.fs" />
+    <Compile Include="Types\AlbumDetails.fs" />
+    <Compile Include="Types\PhotoUploadData.fs" />
+    <Compile Include="Types\PhotoUpload.fs" />
+  </ItemGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
+</Project>

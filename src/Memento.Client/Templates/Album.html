@@ -1,0 +1,58 @@
+﻿<!--suppress ALL -->
+<template id="AlbumCard">
+    <a class="album-card-container" href="album/${Id}">
+        <div class="album-card">
+            <div class="cover-photo">
+                <img src="/images/${Id}" alt="${CoverPhotoAltText}"/>
+            </div>
+            <div class="album-info">
+                <div class="album-name"><i class="fa-slab fa-regular fa-images"></i>&nbsp;${Name}</div>
+                <div class="album-date"><i class="fa-slab fa-regular fa-calendar"></i>&nbsp;${Date}</div>
+                <ul class="album-tags"></ul>
+            </div>
+        </div>
+    </a>
+</template>
+
+<template id="AlbumDetails">
+    <div class="album-controls">
+        <button type="button" class="chunky-button chunky-button-success" onclick="${UploadPhoto}">
+            <i class="fa-regular fa-slab fa-plus"></i>&nbsp;Add Photos
+        </button>
+    </div>
+    <div class="photo-grid">${PhotoList}</div>
+</template>
+
+<template id="AlbumPhoto">
+    <img class="photo-grid-item" src="${PhotoUrl}" data-width="${Width}" data-height="${Height}" alt="${AltText}"/>
+</template>
+
+<template id="PhotoUploadForm">
+    ${PhotoDropzone}
+    ${PhotoInput}
+    <div class="photo-upload-button-container">
+        <button type="button" class="chunky-button chunky-button-green" onclick="${SaveAndUpload}" disabled="${EnableUpload}">Upload</button>
+        <button type="button" class="chunky-button chunky-button-white" onclick="${ClosePhotoUpload}">Cancel</button>
+    </div>
+</template>
+
+<template id="PhotoDropzone">
+    <label class="photo-dropzone" for="photoInput">
+        <span class="help-text">
+            <i class="fa-slab fa-regular fa-arrow-up-from-line fa-2x"></i>&nbsp;Drag and drop a photo here, or click to select one.
+        </span>
+    </label>
+</template>
+
+<template id="PhotoUploadContent">
+    <div class="photo-info-container">
+        <div class="photo-preview-container">
+            <img src="${PhotoPreviewUrl}" alt="Photo preview" />
+            <button type="button" class="clear-photo-button" onclick="${ClearSelectedPhoto}"><i class="fa-slab-press fa-regular fa-trash fa-4x"></i></button>
+        </div>
+        <div class="form-group">
+            <label for="photoName" class="form-label">Name</label>
+            <input id="photoName" name="photoName" type="text" class="form-input" bind="${PhotoName}"/>
+        </div>
+    </div>
+</template>

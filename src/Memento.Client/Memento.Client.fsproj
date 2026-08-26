@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>Memento.Client</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="Styles\web-components\*.scss" />
+    <Content Include="Styles\*.scss" />
+    <Content Include="Templates\*.html" />
+    <Compile Include="Types\Page.fs" />
+    <Compile Include="Types\Templates.fs" />
+    <Compile Include="Features\Photos\PhotoUploadMessage.fs" />
+    <Compile Include="Features\Photos\PhotoUploadModal.fs" />
+    <Content Include="Features\Photos\PhotoUploadModal.bolero.scss" />
+    <Compile Include="Features\Photos\PhotoGrid.fs" />
+    <Compile Include="Features\Albums\AlbumService.fs" />
+    <Compile Include="Features\Albums\AlbumMessage.fs" />
+    <Compile Include="Features\Albums\AlbumGrid.fs" />
+    <Compile Include="Features\Albums\AlbumUpdate.fs" />
+    <Compile Include="Messages\Message.fs" />
+    <Compile Include="Models\AppModel.fs" />
+    <Compile Include="Main.fs" />
+    <Compile Include="Startup.fs" />
+    <Content Include="sixlabors.lic" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="**/*.bolero.scss" DependentUpon="%{Filename}.fs"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Memento.Shared\Memento.Shared.fsproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\css\Photos\PhotoUploadModal.bolero.css" />
+  </ItemGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
+</Project>

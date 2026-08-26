@@ -1,0 +1,29 @@
+// Copyright (c) 2026 ArmoryNode
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+@use "variables";
+@use "mixins";
+
+:root {
+  --accent-color: #{variables.$accent-color};
+  --text-color: #{variables.$text-color};
+  --link-color: #{variables.$link-color};
+  --background-color: #{variables.$background-color};
+  --foreground-color: #{variables.$foreground-color};
+  --navlink-color: #{variables.$navbar-item-color};
+  --navlink-active-color: #{variables.$navbar-selected-color};
+  --border-radius: #{variables.$border-radius};
+  --border-width: #{variables.$border-width};
+  --border-color: #{variables.$border-color};
+  --border: var(--border-width) var(--border-radius) solid var(--border-color);
+
+  --color-red: #{variables.$red};
+  --color-orange: #{variables.$orange};
+  --color-green: #{variables.$green};
+  --color-blue: #{variables.$blue};
+  --color-purple: #{variables.$purple};
+  --color-grey: #{variables.$grey};
+  --color-white: #{variables.$white};
+  --color-off-white: #{variables.$off-white};
+  --color-black: #{variables.$black};
+}

@@ -1,0 +1,53 @@
+// Copyright (c) 2026 ArmoryNode
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+@use "sass:color";
+@use "sass:meta";
+
+@use "root-variables";
+@use "variables";
+@use "mixins";
+@use "functions";
+
+@use "web-components/form";
+@use "web-components/album-card";
+@use "web-components/spinner";
+@use "web-components/photo-grid";
+@use "web-components/button";
+@use "web-components/modal";
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+header {
+  display: flex;
+  position: sticky;
+  height: variables.$header-height;
+  top: 0;
+  place-content: center;
+  background-color: #ffd458;
+  border-bottom: var(--border-width) solid var(--border-color);
+  box-shadow: 0 2px 0 0 rgba(0, 0, 0, .65);
+  z-index: functions.z-index("topbar");
+
+  h1 {
+    font-family: "polymath", sans-serif;
+
+    > a {
+      text-decoration: none;
+      color: unset;
+    }
+  }
+}
+
+body {
+  font-family: "polymath", sans-serif;
+  margin: 0;
+  background-color: variables.$background-color;
+}
+
+#main {
+  padding: 15px;
+  //height: calc(100vh - #{variables.$header-height});
+}

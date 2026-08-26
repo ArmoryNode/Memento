@@ -1,0 +1,80 @@
+// Copyright (c) 2026 ArmoryNode
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+@use "sass:color";
+
+// Colors
+$red:       #BD2626;
+$orange:    #FFA65E;
+$yellow:    #FCCB35;
+$green:     #306B34;
+$blue:      #2456A8;
+$teal:      #6A8B88;
+$purple:    #705ECB;
+$grey:      #D9D9D9;
+$dark-grey: color.scale($grey, $lightness: -20%);
+$white:     #FFFFFF;
+$off-white: #FEFCE8;
+$black:     #1A1A1A;
+
+// Theme
+$accent-color:          $red;
+$text-color:            $black;
+$link-color:            color.adjust($purple, $lightness: -20%);
+$background-color:      $yellow;
+$foreground-color:      $off-white;
+$border-color:          $black;
+$navbar-item-color:     $dark-grey;
+$navbar-selected-color: $red;
+$focus-color:           color.scale($blue, $lightness: 20%);
+$error-color:           color.adjust($red, $saturation: 20%);
+
+// Maps
+$color-map: (
+        "red": $red,
+        "orange": $orange,
+        "yellow": $yellow,
+        "green": $green,
+        "blue": $blue,
+        "purple": $purple,
+        "grey": $grey,
+        "dark-grey": $dark-grey,
+        "white": $white,
+        "black": $black
+);
+
+$text-color-map: (
+        "red": $white,
+        "orange": $black,
+        "yellow": $black,
+        "green": $white,
+        "blue": $white,
+        "purple": $white,
+        "grey": $black,
+        "dark-grey": $white,
+        "white": $black,
+        "black": $white
+);
+
+$z-layers: (
+        "base": 0,
+        "header": 100,
+        "overlay": 300,
+        "popup": 400
+);
+
+// Layout configuration
+$border-radius:         5px;
+$border-width:          2px;
+$bottom-navbar-height:  80px;
+$header-height:         82px;
+
+// Breakpoints
+$mobile-breakpoint:   900px;
+$desktop-breakpoint:  1200px;
+
+// Z indexes
+$z-indexes: (
+  "base": 0,
+  "overlay": 500,
+)

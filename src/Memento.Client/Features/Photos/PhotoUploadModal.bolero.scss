@@ -1,0 +1,83 @@
+// Copyright (c) 2026 ArmoryNode
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+@use "../../Styles/mixins";
+
+.photo-dropzone {
+  position: relative;
+  display: flex;
+  padding: 50px;
+  place-items: center center;
+  border: 4px dashed var(--border-color);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+
+  .help-text {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    row-gap: 5px;
+  }
+}
+
+::deep input.photo-input {
+  display: none;
+}
+
+.photo-info-container {
+  .photo-preview-container {
+    position: relative;
+    width: 100%;
+
+    .clear-photo-button {
+      --size: 60px;
+      display: none;
+      position: absolute;
+      color: var(--color-white);
+      background-color: var(--color-red);
+      width: var(--size);
+      height: var(--size);
+      left: calc(50% - var(--size) / 2);
+      top: calc(50% - var(--size) / 2);
+      border: none;
+      outline: none;
+      border-radius: 50%;
+      cursor: pointer;
+
+      i {
+        font-size: 2em;
+      }
+    }
+
+    &:hover {
+      .clear-photo-button {
+        display: inline-block;
+      }
+
+      img {
+        filter: brightness(70%);
+      }
+    }
+
+    img {
+      width: inherit;
+      border: var(--border-width) solid var(--border-color);
+      border-radius: var(--border-radius);
+      @include mixins.fast-transition-for(filter);
+    }
+  }
+}
+
+.photo-upload-button-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: auto;
+  padding-top: 10px;
+
+  button ~ button {
+    margin-inline-start: 1em;
+  }
+}

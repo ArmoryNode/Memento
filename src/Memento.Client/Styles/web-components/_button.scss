@@ -1,0 +1,56 @@
+// Copyright (c) 2026 ArmoryNode
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+@use "sass:map";
+@use "sass:color";
+
+@use "../variables";
+@use "../mixins";
+
+.chunky-button {
+  --chunky-button-depth: 4px;
+  --chunky-button-padding: 6px;
+}
+
+.chunky-button-flat {
+  --chunky-button-depth: 3px;
+  --chunky-button-padding: 4px;
+}
+
+.chunky-button, .chunky-button-flat {
+  border: variables.$border-width solid variables.$text-color;
+  padding: var(--chunky-button-padding);
+  border-radius: variables.$border-radius;
+  border-bottom-width: var(--chunky-button-depth);
+  cursor: pointer;
+  transform: translateZ(0);
+  transition-duration: .10s;
+  transition-property: border-bottom-width, transform;
+  transition-timing-function: ease-out;
+
+  &:active:not(:disabled):not(.chunky-button-flat) {
+    --button-travel: calc(var(--chunky-button-depth) - 2px);
+    transform: translateY(var(--button-travel));
+    border-bottom-width: calc(var(--button-travel));
+  }
+
+  &:disabled {
+    filter: brightness(75%);
+    cursor: not-allowed;
+  }
+
+  @each $key, $val in variables.$color-map {
+    &.chunky-button-#{$key} {
+      background-color: $val;
+      color: map.get(variables.$text-color-map, $key);
+
+      &:hover:not(:disabled) {
+        background-color: color.adjust($val, $lightness: -5%);
+      }
+
+      &:active:not(:disabled) {
+        background-color: color.adjust($val, $lightness: -10%);
+      }
+    }
+  }
+}

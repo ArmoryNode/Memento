@@ -1,0 +1,24 @@
+﻿<!--suppress ALL -->
+<template id="Spinner">
+    <div class="spinner-container">
+        <div class="spinner"></div>
+        <div class="spinner-message">${Message}</div>
+    </div>
+</template>
+
+<template id="Modal">
+    <div class="modal-container">
+        <div class="modal-overlay"></div>
+        <dialog class="modal" style="--modal-width: ${Width}; --modal-height: ${Height}">
+            <div class="modal-topbar">
+                <div class="modal-title">${ModalTitle}</div>
+                <button type="button" class="close-button chunky-button-flat chunky-button-red" onclick="${CloseModal}">
+                    <i class="fa-solid fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="modal-content">
+                ${ModalContent}
+            </div>
+        </dialog>
+    </div>
+</template>

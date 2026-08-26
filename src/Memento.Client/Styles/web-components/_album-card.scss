@@ -1,0 +1,77 @@
+// Copyright (c) 2026 ArmoryNode
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+@use "../variables";
+@use "../mixins";
+
+$padding: 12px;
+$card-width: 320px;
+$card-height: 200px;
+
+.album-card-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, $card-width);
+  justify-content: center;
+}
+
+.album-card-container {
+  transform: translateZ(0);
+  text-decoration: none;
+
+  .album-card {
+    display: flex;
+    flex-direction: column;
+    padding: $padding;
+    background-color: variables.$foreground-color;
+    border-radius: variables.$border-radius;
+    border: variables.$border-width solid variables.$black;
+    cursor: pointer;
+    @include mixins.add-shadow;
+    @include mixins.fast-transition-for(box-shadow, transform);
+
+    .cover-photo {
+      margin-bottom: $padding;
+      height: $card-height;
+      border-radius: variables.$border-radius;
+      border: 2px solid variables.$black;
+      overflow: hidden;
+
+      > img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+      }
+    }
+
+    .album-info {
+      position: relative;
+      color: var(--text-color);
+
+      .album-name {
+        margin-bottom: 10px;
+        font-size: larger;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .album-date {
+        font-size: medium;
+      }
+
+      ul.album-tags {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+    }
+  }
+
+  &:hover > .album-card {
+    transform: translate3d(-2px, -2px, 0);
+    @include mixins.add-shadow(2);
+  }
+}

@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>Memento.Server</RootNamespace>
+    <UserSecretsId>b8a1798a-e096-46e8-8474-82b0d37ca494</UserSecretsId>
+    <RequiresAspNetWebAssets>true</RequiresAspNetWebAssets>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="Assets\images\missing-image.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\Album.fs" />
+    <Compile Include="Raven\RavenOp.fs" />
+    <Compile Include="Raven\Session.fs" />
+    <Compile Include="Raven\Attachments.fs" />
+    <Compile Include="Raven\Query.fs" />
+    <Compile Include="Raven\Raven.fs" />
+    <Compile Include="Services\AlbumService.fs" />
+    <Compile Include="Controllers\*Controller.fs" />
+    <Compile Include="Index.fs" />
+    <Compile Include="Startup.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Memento.Client\Memento.Client.fsproj" />
+  </ItemGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
+</Project>

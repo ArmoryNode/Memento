@@ -1,0 +1,9 @@
+Bolero
+Bolero.Build
+Bolero.HotReload
+Microsoft.AspNetCore.Components.WebAssembly.DevServer
+RavenDB.Client
+RavenDB.DependencyInjection
+FSharp.Control.FusionTasks
+Nanoid
+SixLabors.ImageSharp

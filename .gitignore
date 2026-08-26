@@ -1,0 +1,86 @@
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Misc
+.user
+.suo
+.cache
+.db
+.DS_Store
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# NuGet Packages
+*.nupkg
+
+# NuGet Symbol Packages
+*.snupkg
+
+# Paket
+/.paket
+/paket-files
+
+# dotenv environment variables file
+.env
+
+# Others
+~$*
+*~
+CodeCoverage/
+
+# MSBuild Binary and Structured Log
+*.binlog
+
+# MSTest test Results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# NUnit
+*.VisualState.xml
+TestResult.xml
+nunit-*.xml
+
+# Ionide
+.ionide
+
+# Certificates
+certs/
+
+# License files
+*.lic
+
+# JetBrains Rider
+.idea/
+
+# VS Code
+.vscode/
+
+# Visual Studio
+.vs/
+
+# Generated css
+src/Memento.Client/wwwroot/css/*.css
+src/Memento.Client/wwwroot/css/*.css.map
+
+# Generated styles for Blazor CSS isolation
+**/Features/**/*.css
+**/Features/**/*.css.map

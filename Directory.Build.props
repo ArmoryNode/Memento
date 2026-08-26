@@ -1,0 +1,7 @@
+<Project>
+  <PropertyGroup>
+    <!-- Paket explicitly lists all transitive packages as PackageReferences,
+         which conflicts with .NET 10's NuGet package pruning feature. -->
+    <NoWarn>$(NoWarn);NU1510</NoWarn>
+  </PropertyGroup>
+</Project>

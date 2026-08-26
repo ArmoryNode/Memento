@@ -1,0 +1,18 @@
+source https://api.nuget.org/v3/index.json
+framework: net10.0
+storage: none
+
+nuget AspNetCore.SassCompiler
+nuget FSharp.Control.FusionTasks
+nuget FSharp.Core content: none
+nuget Bolero >= 0.25.63
+nuget Bolero.Build >= 0.25.63
+nuget Bolero.Server >= 0.25.63
+nuget Bolero.HotReload >= 0.25.8
+nuget Bolero.HotReload.Server >= 0.25.8
+nuget Microsoft.AspNetCore.Components.WebAssembly.Server
+nuget Microsoft.AspNetCore.Components.WebAssembly.DevServer
+nuget Nanoid
+nuget RavenDB.Client
+nuget RavenDB.DependencyInjection
+nuget SixLabors.ImageSharp

@@ -1,0 +1,29 @@
+// Copyright (c) 2026 ArmoryNode
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+@use "../mixins";
+@use "../variables";
+
+.form-group, .form-group-inline {
+  display: flex;
+  justify-content: start;
+  flex-flow: column nowrap;
+  
+  &.form-group-inline {
+    flex-flow: row nowrap;
+  }
+}
+
+.form-label {
+  + input.form-input {
+    padding: 0.5em;
+    outline: none;
+    @include mixins.add-border;
+    @include mixins.fast-transition-for(box-shadow, border-color);
+    
+    &:active, &:focus {
+      border-color: variables.$focus-color;
+      @include mixins.add-focus-border;
+    }
+  }
+}
