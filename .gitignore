@@ -36,7 +36,6 @@ ScaffoldingReadMe.txt
 *.snupkg
 
 # Paket
-/.paket
 /paket-files
 
 # dotenv environment variables file
