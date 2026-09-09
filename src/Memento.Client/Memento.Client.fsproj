@@ -48,6 +48,7 @@
                       File="%(_MissingScopedCss.Identity)"
                       Lines="/* Placeholder file. You shouldn't be seeing this. */"
                       Overwrite="false" />
+    <Touch Files="@(_MissingScopedCss)" Time="2000-01-01T00:00:00" />
     <ItemGroup>
       <BoleroScopedCss Include="@(_MissingScopedCss)" Exclude="@(BoleroScopedCss)">
         <ScopeName>$([System.IO.Path]::GetFileNameWithoutExtension('%(_MissingScopedCss.Filename)'))</ScopeName>
