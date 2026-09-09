@@ -34,4 +34,24 @@
     <_ContentIncludedByDefault Remove="wwwroot\css\Photos\PhotoUploadModal.bolero.css" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
+
+  <!-- Need this to generate placeholder files so the scoped css type providers resolve correctly during a clean build -->
+  <Target Name="CreateScopedCssPlaceholders"
+          BeforeTargets="ResolveScopedCssInputs;CoreCompile"
+          Condition="'$(DesignTimeBuild)' != 'true'">
+    <ItemGroup>
+      <_ScopedScss Include="Features\**\*.bolero.scss" />
+      <_MissingScopedCss Include="@(_ScopedScss->'%(RelativeDir)%(Filename).css')"
+                         Condition="!Exists('%(RootDir)%(Directory)%(Filename).css')" />
+    </ItemGroup>
+    <WriteLinesToFile Condition="!Exists('$(MSBuildProjectDirectory)\%(_MissingScopedCss.Identity)')"
+                      File="%(_MissingScopedCss.Identity)"
+                      Lines="/* Placeholder file. You shouldn't be seeing this. */"
+                      Overwrite="false" />
+    <ItemGroup>
+      <BoleroScopedCss Include="@(_MissingScopedCss)" Exclude="@(BoleroScopedCss)">
+        <ScopeName>$([System.IO.Path]::GetFileNameWithoutExtension('%(_MissingScopedCss.Filename)'))</ScopeName>
+      </BoleroScopedCss>
+    </ItemGroup>
+  </Target>
 </Project>
