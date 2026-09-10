@@ -39,7 +39,6 @@ let uploadPhoto (http: HttpClient, albumId: string, file: UploadFile) =
 
         let! response = http.PostAsync($"/Images/{albumId}", formDataContent)
         response.EnsureSuccessStatusCode() |> ignore
-        printfn $"is success: %b{response.IsSuccessStatusCode}"
     }
 
 let generatePhotoPreview (file: UploadFile, jsRuntime: IJSRuntime) =
@@ -47,7 +46,6 @@ let generatePhotoPreview (file: UploadFile, jsRuntime: IJSRuntime) =
         use stream = new MemoryStream(file.Data)
         use streamRef = new DotNetStreamReference(stream)
         let! preview = jsRuntime.InvokeAsync("photoUtils.getThumbnailUrl", streamRef, file.ContentType)
-        printfn $"preview: %s{preview}"
         return preview |> Option.ofObj
     }
 

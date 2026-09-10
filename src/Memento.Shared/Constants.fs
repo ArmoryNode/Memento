@@ -5,6 +5,6 @@ module Memento.Shared.Constants
 
 let SITE_TITLE = "ArmoryNode"
 let SUPPORTED_IMAGE_TYPES =
-    [| "jpeg"; "jxl"; "png"; "webp"; "avif"; "heif"; "heic"; "tiff" |]
+    [| "jpeg"; "jxl"; "png"; "webp"; "avif"; |]
     |> Seq.map (sprintf "image/%s")
     |> String.concat ","

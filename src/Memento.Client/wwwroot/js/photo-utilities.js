@@ -7,7 +7,7 @@ const pixelValueRegex = /^(\d+)px/;
 const missingPhotoUrl = "/Images/MissingPhoto";
 
 function isNullOrWhitespace(str) {
-    return str === null 
+    return str === null
         || typeof str === 'undefined'
         || typeof str !== 'string'
         || str.trim() === '';
@@ -23,7 +23,7 @@ window.photoUtils = {
             img.src = URL.createObjectURL(blob);
         
             img.onload = function() {
-                const maxSize = 500;
+                const maxSize = 420;
                 const width = img.width;
                 const height = img.height;
                 const ratio = width / height;
@@ -41,6 +41,11 @@ window.photoUtils = {
                     URL.revokeObjectURL(img.src);
                     resolve(URL.createObjectURL(blob));
                 }, "image/png", 0.7);
+            }
+            
+            img.onerror = function(e) {
+                console.error("Error loading image:", e);
+                resolve(null);
             }
         });
     },
