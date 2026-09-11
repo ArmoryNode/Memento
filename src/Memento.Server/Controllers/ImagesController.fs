@@ -65,7 +65,8 @@ type ImagesController(store: IDocumentStore, env: IWebHostEnvironment) =
         }
 
     [<HttpPost("{albumId}")>]
-    [<DisableRequestSizeLimit>]
+    [<RequestSizeLimit(1_073_741_824L)>]
+    [<RequestFormLimits(MultipartBodyLengthLimit = 1_073_741_824L)>]
     member this.UploadAlbumPhoto
         ([<FromRoute>] albumId: string, [<FromForm(Name = "photo")>] photo: IFormFile, ct: CancellationToken)
         =
