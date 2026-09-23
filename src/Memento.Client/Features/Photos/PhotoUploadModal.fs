@@ -25,6 +25,31 @@ type PhotoUploadModal() =
     override _.CssScope = CssScopes.PhotoUploadModal
 
     override this.View model dispatch =
+        let canInteract = not model.Uploading
+        let previewSpinner =
+            cond model.PreviewLoading
+            <| function
+                | true -> UtilityTemplates.Spinner().Message("Loading preview...").Elt()
+                | false -> empty ()
+
+        let uploadSpinner =
+            cond model.Uploading
+            <| function
+                | true -> UtilityTemplates.Spinner().Message("Uploading photo...").Elt()
+                | false -> empty ()
+
+        let selectedPhoto =
+            cond model.File
+            <| function
+                | Some file ->
+                    AlbumTemplates
+                        .PhotoUploadContent()
+                        .PhotoPreviewUrl(model.PreviewUrl |> Option.defaultValue String.Empty)
+                        .PhotoName(file.Name, dispatch << UpdateName)
+                        .ClearSelectedPhoto(fun _ -> dispatch ClearPhoto)
+                        .Elt()
+                | None -> AlbumTemplates.PhotoDropzone().Elt()
+
         UtilityTemplates
             .Modal()
             .ModalTitle(
@@ -35,15 +60,8 @@ type PhotoUploadModal() =
             )
             .ModalContent(
                 concat {
-                    cond model.PreviewLoading
-                    <| function
-                        | true -> UtilityTemplates.Spinner().Message("Loading preview...").Elt()
-                        | false -> empty ()
-
-                    cond model.Uploading
-                    <| function
-                        | true -> UtilityTemplates.Spinner().Message("Uploading photo...").Elt()
-                        | false -> empty ()
+                    previewSpinner
+                    uploadSpinner
 
                     AlbumTemplates
                         .PhotoUploadForm()
@@ -79,36 +97,19 @@ type PhotoUploadModal() =
                                 fileInputRef
                             }
                         )
-                        .PhotoDropzone(
-                            cond model.File
-                            <| function
-                                | Some file ->
-                                    AlbumTemplates
-                                        .PhotoUploadContent()
-                                        .PhotoPreviewUrl(model.PreviewUrl |> Option.defaultValue String.Empty)
-                                        .PhotoName(file.Name, dispatch << UpdateName)
-                                        .ClearSelectedPhoto(fun _ -> dispatch ClearPhoto)
-                                        .Elt()
-                                | None -> AlbumTemplates.PhotoDropzone().Elt()
-                        )
+                        .PhotoDropzone(selectedPhoto)
                         .EnableUpload(
-                            if model.File.IsSome && not model.Uploading then
+                            if model.File.IsSome && canInteract then
                                 null
                             else
                                 "disabled"
                         )
-                        .SaveAndUpload(fun _ ->
-                            if not model.Uploading then
-                                dispatch UploadPhoto)
-                        .ClosePhotoUpload(fun _ ->
-                            if not model.Uploading then
-                                dispatch EndPhotoUpload)
+                        .SaveAndUpload(fun _ -> if canInteract then dispatch UploadPhoto)
+                        .ClosePhotoUpload(fun _ -> if canInteract then dispatch EndPhotoUpload)
                         .Elt()
                 }
             )
             .Width("450px")
             .Height("250px")
-            .CloseModal(fun _ ->
-                if not model.Uploading then
-                    dispatch EndPhotoUpload)
+            .CloseModal(fun _ -> if canInteract then dispatch EndPhotoUpload)
             .Elt()
