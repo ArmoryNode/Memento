@@ -19,6 +19,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "root", "root", "{3AEE1C85-4DE1-42C1-B8D1-EEAAFD096A8C}"
 	ProjectSection(SolutionItems) = preProject
 		global.json = global.json
+		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
 Global
