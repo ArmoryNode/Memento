@@ -26,6 +26,7 @@ type PhotoUploadModal() =
 
     override this.View model dispatch =
         let canInteract = not model.Uploading
+
         let previewSpinner =
             cond model.PreviewLoading
             <| function
@@ -104,12 +105,18 @@ type PhotoUploadModal() =
                             else
                                 "disabled"
                         )
-                        .SaveAndUpload(fun _ -> if canInteract then dispatch UploadPhoto)
-                        .ClosePhotoUpload(fun _ -> if canInteract then dispatch EndPhotoUpload)
+                        .SaveAndUpload(fun _ ->
+                            if canInteract then
+                                dispatch UploadPhoto)
+                        .ClosePhotoUpload(fun _ ->
+                            if canInteract then
+                                dispatch EndPhotoUpload)
                         .Elt()
                 }
             )
             .Width("450px")
             .Height("250px")
-            .CloseModal(fun _ -> if canInteract then dispatch EndPhotoUpload)
+            .CloseModal(fun _ ->
+                if canInteract then
+                    dispatch EndPhotoUpload)
             .Elt()

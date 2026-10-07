@@ -68,15 +68,22 @@ type ImagesController(store: IDocumentStore, env: IWebHostEnvironment) =
     [<RequestSizeLimit(1_073_741_824L)>]
     [<RequestFormLimits(MultipartBodyLengthLimit = 1_073_741_824L)>]
     member this.UploadAlbumPhoto
-        ([<FromRoute>] albumId: string, [<FromForm(Name = "photo")>] photo: IFormFile, ct: CancellationToken)
-        =
+        (
+            [<FromRoute>] albumId: string,
+            [<FromForm(Name = "photo")>] photo: IFormFile,
+            [<FromForm(Name = "thumbnail")>] thumbnail: IFormFile,
+            ct: CancellationToken
+        ) =
         let op =
             raven {
                 match! Session.load<Album> albumId with
                 | None -> return this.NotFound() :> IActionResult
                 | Some album ->
-                    // Todo - Generate the image thumbnail, and store it along with the original photo
-                    // as attachments in RavenDB
+                    let _ = photo
+                    let _ = thumbnail
+                    let _ = album
+                    // Todo - Store the original photo and the client-generated thumbnail
+                    // as attachments in RavenDB.
                     return this.Ok() :> IActionResult
             }
 

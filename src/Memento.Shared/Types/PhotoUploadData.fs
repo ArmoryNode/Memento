@@ -16,13 +16,15 @@ type PhotoUploadData =
       AltText: string
       PreviewUrl: string option
       File: UploadFile option
+      Thumbnail: UploadFile option
       PreviewLoading: bool
       Uploading: bool }
-    
+
     static member Empty =
         { Name = String.Empty
           AltText = String.Empty
           PreviewUrl = None
           File = None
+          Thumbnail = None
           PreviewLoading = false
           Uploading = false }

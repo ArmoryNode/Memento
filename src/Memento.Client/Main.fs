@@ -30,12 +30,38 @@ let initModel =
       PhotoUpload = Idle
       IsLoaded = false }
 
-let uploadPhoto (http: HttpClient, albumId: string, file: UploadFile) =
+type ThumbnailJsResult() =
+    member val PreviewUrl = String.Empty with get, set
+    member val ContentType = String.Empty with get, set
+    member val DataUrl = String.Empty with get, set
+
+let tryGetDataUrlContent (dataUrl: string) =
+    if String.IsNullOrWhiteSpace dataUrl then
+        None
+    else
+        let separator = dataUrl.IndexOf(',')
+
+        if separator < 0 || separator = dataUrl.Length - 1 then
+            None
+        else
+            try
+                dataUrl[separator + 1 ..] |> Convert.FromBase64String |> Some
+            with :? FormatException ->
+                None
+
+let uploadPhoto (http: HttpClient, albumId: string, file: UploadFile, thumbnail: UploadFile option) =
     async {
         use formDataContent = new MultipartFormDataContent()
         let content = new ByteArrayContent(file.Data)
         content.Headers.ContentType <- System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType)
         formDataContent.Add(content, "photo", file.Name)
+
+        match thumbnail with
+        | Some thumbnail ->
+            let thumbnailContent = new ByteArrayContent(thumbnail.Data)
+            thumbnailContent.Headers.ContentType <- System.Net.Http.Headers.MediaTypeHeaderValue(thumbnail.ContentType)
+            formDataContent.Add(thumbnailContent, "thumbnail", thumbnail.Name)
+        | None -> ()
 
         let! response = http.PostAsync($"/Images/{albumId}", formDataContent)
         response.EnsureSuccessStatusCode() |> ignore
@@ -45,8 +71,27 @@ let generatePhotoPreview (file: UploadFile, jsRuntime: IJSRuntime) =
     async {
         use stream = new MemoryStream(file.Data)
         use streamRef = new DotNetStreamReference(stream)
-        let! preview = jsRuntime.InvokeAsync("photoUtils.getThumbnailUrl", streamRef, file.ContentType)
-        return preview |> Option.ofObj
+
+        let! preview = jsRuntime.InvokeAsync<ThumbnailJsResult>("photoUtils.getThumbnailPayload", streamRef, file.ContentType)
+
+        let thumbnail =
+            preview.DataUrl
+            |> tryGetDataUrlContent
+            |> Option.map (fun data ->
+                { Name = $"{Path.GetFileNameWithoutExtension(file.Name)}-thumbnail.png"
+                  ContentType =
+                    if String.IsNullOrWhiteSpace preview.ContentType then
+                        "image/png"
+                    else
+                        preview.ContentType
+                  Data = data })
+
+        return
+            { PreviewUrl =
+                preview.PreviewUrl
+                |> Option.ofObj
+                |> Option.filter (String.IsNullOrWhiteSpace >> not)
+              Thumbnail = thumbnail }
     }
 
 let updatePhotoUpload js http (selectedAlbum: AlbumDetails option) message photoUpload =
@@ -58,21 +103,24 @@ let updatePhotoUpload js http (selectedAlbum: AlbumDetails option) message photo
                 { upload with
                     File = Some file
                     PreviewUrl = previewUrl
+                    Thumbnail = None
                     PreviewLoading = true }
             | Idle ->
                 { PhotoUploadData.Empty with
                     File = Some file
                     PreviewUrl = previewUrl
+                    Thumbnail = None
                     PreviewLoading = true }
 
         let onSuccess = GeneratedPreview >> PhotoUploadMessage >> AlbumMessage
         Uploading data, Cmd.OfAsync.perform generatePhotoPreview (file, js) onSuccess
-    | GeneratedPreview previewUrl ->
+    | GeneratedPreview generatedThumbnail ->
         let photoUpload =
             photoUpload
             |> PhotoUpload.map (fun upload ->
                 { upload with
-                    PreviewUrl = previewUrl
+                    PreviewUrl = generatedThumbnail.PreviewUrl
+                    Thumbnail = generatedThumbnail.Thumbnail
                     PreviewLoading = false
                     Uploading = false })
 
@@ -83,14 +131,14 @@ let updatePhotoUpload js http (selectedAlbum: AlbumDetails option) message photo
             | Uploading upload ->
                 let cmd =
                     match photoUpload with
-                    | Uploading model ->
-                        Cmd.OfJS.attempt js "photoUtils.revokePreviewUrl" [| model.PreviewUrl |> Option.toObj |] Error
+                    | Uploading model -> Cmd.OfJS.attempt js "photoUtils.revokePreviewUrl" [| model.PreviewUrl |> Option.toObj |] Error
                     | Idle -> Cmd.none
 
                 Uploading
                     { upload with
                         PreviewUrl = None
-                        File = None },
+                        File = None
+                        Thumbnail = None },
                 cmd
             | _ -> Idle, Cmd.none
 
@@ -100,14 +148,14 @@ let updatePhotoUpload js http (selectedAlbum: AlbumDetails option) message photo
             photoUpload |> PhotoUpload.map (fun upload -> { upload with Uploading = true })
 
         let cmd =
-            match selectedAlbum, photoUpload |> PhotoUpload.get _.File with
-            | Some album, Some photo ->
+            match selectedAlbum, photoUpload with
+            | Some album, Uploading upload when upload.File.IsSome ->
                 let onComplete _ =
                     PhotoUploaded |> PhotoUploadMessage |> AlbumMessage
 
                 let onError = UploadError >> PhotoUploadMessage >> AlbumMessage
 
-                Cmd.OfAsync.either uploadPhoto (http, album.AlbumId, photo) onComplete onError
+                Cmd.OfAsync.either uploadPhoto (http, album.AlbumId, upload.File.Value, upload.Thumbnail) onComplete onError
             | _ -> Cmd.none
 
         nextModel, cmd
@@ -200,8 +248,7 @@ let view model dispatch =
 
                             cond model.PhotoUpload
                             <| function
-                                | Uploading upload ->
-                                    ecomp<PhotoUploadModal, _, _> upload photoUploadDispatch { attr.empty () }
+                                | Uploading upload -> ecomp<PhotoUploadModal, _, _> upload photoUploadDispatch { attr.empty () }
                                 | Idle -> empty ()
                         }
             | false -> UtilityTemplates.Spinner().Elt()

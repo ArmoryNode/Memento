@@ -5,9 +5,13 @@ namespace Memento.Client.Features.Photos
 
 open Memento.Shared.Types
 
+type GeneratedThumbnail =
+    { PreviewUrl: string option
+      Thumbnail: UploadFile option }
+
 type PhotoUploadMessage =
     | BeginPhotoUpload
-    | GeneratedPreview of string option
+    | GeneratedPreview of GeneratedThumbnail
     | SelectPhoto of UploadFile * string option
     | ClearPhoto
     | UpdateName of string
