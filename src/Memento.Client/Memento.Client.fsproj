@@ -1,58 +1,64 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <RootNamespace>Memento.Client</RootNamespace>
-  </PropertyGroup>
-  <ItemGroup>
-    <Content Include="Styles\web-components\*.scss" />
-    <Content Include="Styles\*.scss" />
-    <Content Include="Templates\*.html" />
-    <Compile Include="Types\Page.fs" />
-    <Compile Include="Types\Templates.fs" />
-    <Compile Include="Features\Photos\PhotoUploadMessage.fs" />
-    <Compile Include="Features\Photos\PhotoUploadModal.fs" />
-    <Content Include="Features\Photos\PhotoUploadModal.bolero.scss" />
-    <Compile Include="Features\Photos\PhotoGrid.fs" />
-    <Compile Include="Features\Albums\AlbumService.fs" />
-    <Compile Include="Features\Albums\AlbumMessage.fs" />
-    <Compile Include="Features\Albums\AlbumGrid.fs" />
-    <Compile Include="Features\Albums\AlbumUpdate.fs" />
-    <Compile Include="Messages\Message.fs" />
-    <Compile Include="Models\AppModel.fs" />
-    <Compile Include="Main.fs" />
-    <Compile Include="Startup.fs" />
-    <Content Include="sixlabors.lic" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="**/*.bolero.scss" DependentUpon="%{Filename}.fs"/>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Memento.Shared\Memento.Shared.fsproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="wwwroot\css\Photos\PhotoUploadModal.bolero.css" />
-  </ItemGroup>
-  <Import Project="..\..\.paket\Paket.Restore.targets" />
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <RootNamespace>Memento.Client</RootNamespace>
+    </PropertyGroup>
+    <ItemGroup>
+        <Content Include="Styles\web-components\*.scss"/>
+        <Content Include="Styles\*.scss"/>
+        <Content Include="Templates\*.html"/>
+        <Compile Include="Types\Page.fs"/>
+        <Compile Include="Types\Templates.fs"/>
+        <Compile Include="Features\Photos\PhotoUploadMessage.fs"/>
+        <Compile Include="Features\Photos\PhotoUploadModal.fs"/>
+        <Content Include="Features\Photos\PhotoUploadModal.bolero.scss"/>
+        <Compile Include="Features\Photos\PhotoGrid.fs"/>
+        <Compile Include="Features\Albums\AlbumService.fs"/>
+        <Compile Include="Features\Albums\AlbumMessage.fs"/>
+        <Compile Include="Features\Albums\AlbumGrid.fs"/>
+        <Compile Include="Features\Albums\AlbumUpdate.fs"/>
+        <Compile Include="Messages\Message.fs"/>
+        <Compile Include="Models\AppModel.fs"/>
+        <Compile Include="Main.fs"/>
+        <Compile Include="Startup.fs"/>
+        <Content Include="sixlabors.lic"/>
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="**/*.bolero.scss" DependentUpon="%{Filename}.fs"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Memento.Shared\Memento.Shared.fsproj"/>
+    </ItemGroup>
+    <ItemGroup>
+        <_ContentIncludedByDefault Remove="wwwroot\css\Photos\PhotoUploadModal.bolero.css"/>
+    </ItemGroup>
+    <Import Project="..\..\.paket\Paket.Restore.targets"/>
 
-  <!-- Need this to generate placeholder files so the scoped css type providers resolve correctly during a clean build -->
-  <Target Name="CreateScopedCssPlaceholders"
-          BeforeTargets="ResolveScopedCssInputs;CoreCompile"
-          Condition="'$(DesignTimeBuild)' != 'true'">
-    <ItemGroup>
-      <_ScopedScss Include="Features\**\*.bolero.scss" />
-      <_MissingScopedCss Include="@(_ScopedScss->'%(RelativeDir)%(Filename).css')"
-                         Condition="!Exists('%(RootDir)%(Directory)%(Filename).css')" />
-    </ItemGroup>
-    <WriteLinesToFile Condition="!Exists('$(MSBuildProjectDirectory)\%(_MissingScopedCss.Identity)')"
-                      File="%(_MissingScopedCss.Identity)"
-                      Lines="/* Placeholder file. You shouldn't be seeing this. */"
-                      Overwrite="false" />
-    <Touch Files="@(_MissingScopedCss)" Time="2000-01-01T00:00:00" />
-    <ItemGroup>
-      <BoleroScopedCss Include="@(_MissingScopedCss)" Exclude="@(BoleroScopedCss)">
-        <ScopeName>$([System.IO.Path]::GetFileNameWithoutExtension('%(_MissingScopedCss.Filename)'))</ScopeName>
-      </BoleroScopedCss>
-    </ItemGroup>
-  </Target>
+    <!-- Need this to generate placeholder files so the scoped css type providers resolve correctly during a clean build -->
+    <Target Name="CreateScopedCssPlaceholders"
+            BeforeTargets="ResolveScopedCssInputs;CoreCompile"
+            Condition="'$(DesignTimeBuild)' != 'true'">
+        <ItemGroup>
+            <_ScopedScss Include="**/*.bolero.scss"/>
+            <_ScopedCssPlaceholder Include="@(_ScopedScss -> '%(RelativeDir)%(Filename).css')"/>
+            <_MissingScopedCss Include="@(_ScopedCssPlaceholder)" Condition="!Exists('%(Identity)')"/>
+        </ItemGroup>
+
+        <WriteLinesToFile Condition="'@(_MissingScopedCss)' != ''"
+                          File="%(_MissingScopedCss.Identity)"
+                          Lines="/* Placeholder file. You shouldn't be seeing this. */"
+                          Overwrite="false"/>
+        <Touch Condition="'@(_MissingScopedCss)' != ''"
+               Files="@(_MissingScopedCss)"
+               Time="2000-01-01T00:00:00"/>
+        
+        <Delete Condition="'@(_MissingScopedCss)' != ''" Files="$(_BoleroScopedCssSourceFile)"/>
+
+        <ItemGroup>
+            <BoleroScopedCss Include="@(_MissingScopedCss)" Exclude="@(BoleroScopedCss)">
+                <ScopeName>$([System.IO.Path]::GetFileNameWithoutExtension('%(Filename)'))</ScopeName>
+            </BoleroScopedCss>
+        </ItemGroup>
+    </Target>
 </Project>
