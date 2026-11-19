@@ -20,6 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "root", "root", "{3AEE1C85-4
 	ProjectSection(SolutionItems) = preProject
 		global.json = global.json
 		.editorconfig = .editorconfig
+		.config\dotnet-tools.json = .config\dotnet-tools.json
 	EndProjectSection
 EndProject
 Global
