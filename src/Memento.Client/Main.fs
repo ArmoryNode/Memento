@@ -20,7 +20,6 @@ open Memento.Client.Types
 open Memento.Client.Models
 open Memento.Shared.Types
 open Microsoft.AspNetCore.Components
-open Microsoft.AspNetCore.Components.Forms
 open Microsoft.JSInterop
 
 let initModel =

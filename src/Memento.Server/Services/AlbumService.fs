@@ -29,6 +29,7 @@ type AlbumService(ctx: IRemoteContext, store: IDocumentStore) =
                         query {
                             for album in albumQuery do
                                 sortByDescending album.Date
+                                thenBy album.Name
                                 select album
                         }
 
